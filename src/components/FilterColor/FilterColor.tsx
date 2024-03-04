@@ -9,8 +9,15 @@ import useStore from '@store/store';
 const FilterColor = () => {
   const [showPalette, setShowPalette, paletteRef] = useHideOnOutsideClick();
   const setColorFilter = useStore((state) => state.setColorFilter);
+
+  // Function to apply color filter
   const filterColor = (color: string) => {
-    setColorFilter(color); // Now correctly using the setColorFilter from the store
+    setColorFilter(color);
+  };
+
+  // Function to reset color filter explicitly
+  const resetColorFilter = () => {
+    setColorFilter(''); // Reset color filter to show all chats
   };
 
   return (
