@@ -18,7 +18,7 @@ const Menu = () => {
   const ref = useRef<HTMLDivElement>(null);
 
   const minimumWidth = 260; // Minimum width before hiding the menu
-  const hideMenuWidthThreshold = 100; // Threshold to decide when to hide the menu
+  const hideMenuWidthThreshold = 80; // Threshold to decide when to hide the menu
 
   useEffect(() => {
     if (window.innerWidth < 768) setHideSideMenu(true);
