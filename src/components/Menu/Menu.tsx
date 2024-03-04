@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import useStore from '@store/store';
 
@@ -14,27 +14,59 @@ import MenuIcon from '@icon/MenuIcon';
 const Menu = () => {
   const hideSideMenu = useStore((state) => state.hideSideMenu);
   const setHideSideMenu = useStore((state) => state.setHideSideMenu);
+  const [menuWidth, setMenuWidth] = useState(260); // Default width
+  const ref = useRef<HTMLDivElement>(null);
 
-  const windowWidthRef = useRef<number>(window.innerWidth);
+  const minimumWidth = 260; // Minimum width before hiding the menu
+  const hideMenuWidthThreshold = 100; // Threshold to decide when to hide the menu
 
   useEffect(() => {
     if (window.innerWidth < 768) setHideSideMenu(true);
-    window.addEventListener('resize', () => {
-      if (
-        windowWidthRef.current !== window.innerWidth &&
-        window.innerWidth < 768
-      )
+    const handleResize = () => {
+      if (window.innerWidth < 768) setHideSideMenu(true);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [setHideSideMenu]);
+
+  const startResizing = (mouseDownEvent: React.MouseEvent<HTMLDivElement>) => {
+    mouseDownEvent.preventDefault();
+    const startX = mouseDownEvent.pageX;
+    const startWidth = ref.current?.offsetWidth || 0;
+  
+    const handleMouseMove = (mouseMoveEvent: MouseEvent) => {
+      const newWidth = startWidth + mouseMoveEvent.pageX - startX;
+      if (newWidth > minimumWidth) {
+        setMenuWidth(newWidth);
+      } else if (newWidth <= hideMenuWidthThreshold) {
+        // Hide the menu if dragged beyond the threshold
         setHideSideMenu(true);
-    });
-  }, []);
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+      } else {
+        // Prevent the menu from being resized below the minimum width
+        setMenuWidth(minimumWidth);
+      }
+    };
+  
+    const handleMouseUp = () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  };
 
   return (
     <>
       <div
+        ref={ref}
         id='menu'
         className={`group/menu dark new-menu-dark fixed md:inset-y-0 md:flex md:w-[260px] md:flex-col transition-transform z-[999] top-0 left-0 h-full max-md:w-3/4 ${
           hideSideMenu ? 'translate-x-[-100%]' : 'translate-x-[0%]'
         }`}
+        style={{ width: menuWidth }}
       >
         <div className='flex h-full min-h-0 flex-col'>
           <div className='flex h-full w-full flex-1 items-start border-white/20'>
@@ -47,6 +79,11 @@ const Menu = () => {
               <MenuOptions />
             </nav>
           </div>
+        </div>
+        <div
+          className="resize-handle cursor-ew-resize absolute top-0 right-0 h-full w-2"
+          onMouseDown={startResizing}
+        >
         </div>
         <div
           id='menu-close'
