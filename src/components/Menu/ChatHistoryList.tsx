@@ -44,6 +44,7 @@ const ChatHistoryList = () => {
     const _noFolders: ChatHistoryInterface[] = [];
     const chats = useStore.getState().chats;
     const folders = useStore.getState().folders;
+    let shouldExpandFolders: { [key: string]: boolean } = {};
 
     Object.values(folders)
       .sort((a, b) => a.order - b.order)
@@ -60,7 +61,6 @@ const ChatHistoryList = () => {
                             (colorFilter && chat.color !== colorFilter);
   
         if (shouldSkip) {
-          console.log("ShouldSkip:", colorFilter);
           return;
         }
   
@@ -73,8 +73,19 @@ const ChatHistoryList = () => {
             index: index,
             id: chat.id,
           });
+          // Mark folder for expansion if it contains a chat matching the filter
+          shouldExpandFolders[chat.folder] = true;
         }
       });
+    }
+
+    // Automatically expand folders containing chats that match the color filter
+    if (colorFilter) {
+      const updatedFolders = { ...folders };
+      Object.keys(updatedFolders).forEach(folderId => {
+        updatedFolders[folderId].expanded = !!shouldExpandFolders[folderId];
+      });
+      setFolders(updatedFolders); // Assuming setFolders updates the global state of folders
     }
   
     setChatFolders(_folders);
