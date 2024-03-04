@@ -47,11 +47,11 @@ const ChatContent = () => {
   // Map filtered messages to include their original index
   const filteredMessagesWithOriginalIndex = messages
   .map((msg, index) => ({ ...msg, originalIndex: index }))
-  .filter((msg, index) => blockFilter === 'all' || msg.role === blockFilter);
+  .filter((msg, index) => blockFilter === 'All' || msg.role === blockFilter);
 
   // Effect to filter messages whenever messages or blockFilter changes
   useEffect(() => {
-    if (blockFilter === 'all') {
+    if (blockFilter === 'All') {
       setFilteredMessages(messages);
     } else {
       const filtered = messages.filter((msg) => msg.role === blockFilter);

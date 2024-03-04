@@ -12,7 +12,7 @@ const DownButton = ({
   return (
     <BaseButton
       icon={<DownChevronArrow />}
-      buttonProps={{ 'aria-label': 'shift message down' }}
+      buttonProps={{ 'aria-label': 'display assistant message' }}
       onClick={onClick}
     />
   );

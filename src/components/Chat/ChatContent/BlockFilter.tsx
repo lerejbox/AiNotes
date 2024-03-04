@@ -7,11 +7,11 @@ import { useTranslation } from 'react-i18next';
 const BlockFilter = () => {
   const { t } = useTranslation();
   const setBlockFilter = useStore((state) => state.setBlockFilter);
-  const [selectedFilter, setSelectedFilter] = useState<'all' | 'user' | 'assistant' | 'system'>('all');
+  const [selectedFilter, setSelectedFilter] = useState<'All' | 'user' | 'assistant' | 'system'>('All');
   const [dropDown, setDropDown, dropDownRef] = useHideOnOutsideClick();
 
   // Explicitly type the filters array
-  const filters: Array<'all' | 'user' | 'assistant' | 'system'> = ['all', 'user', 'assistant', 'system'];
+  const filters: Array<'All' | 'user' | 'assistant' | 'system'> = ['All', 'user', 'assistant', 'system'];
 
   return (
     <div className='relative'>
