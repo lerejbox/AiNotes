@@ -6,7 +6,7 @@ import useStore from '@store/store';
 import NewFolderIcon from '@icon/NewFolderIcon';
 import { Folder, FolderCollection } from '@type/chat';
 
-const NewFolder = () => {
+const NewFolder = ({ parentFolderId }: { parentFolderId?: string }) => {
   const { t } = useTranslation();
   const generating = useStore((state) => state.generating);
   const setFolders = useStore((state) => state.setFolders);
@@ -32,6 +32,7 @@ const NewFolder = () => {
       name,
       expanded: false,
       order: 0,
+      parentFolderId, // Assign the parentFolderId to the new folder
     };
 
     Object.values(updatedFolders).forEach((folder) => {

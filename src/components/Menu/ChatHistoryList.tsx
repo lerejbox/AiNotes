@@ -46,6 +46,19 @@ const ChatHistoryList = () => {
     const folders = useStore.getState().folders;
     let shouldExpandFolders: { [key: string]: boolean } = {};
 
+    // New function to recursively add folders and their nested folders
+    const addNestedFolders = (parentId: string | undefined, parentOrder: number) => {
+      Object.values(folders)
+        .filter((f) => f.parentFolderId === parentId)
+        .sort((a, b) => a.order - b.order)
+        .forEach((f) => {
+          _folders[f.id] = [];
+          addNestedFolders(f.id, f.order); // Recursive call to add any nested folders
+        });
+    };
+
+    addNestedFolders(undefined, 0); // Start with root-level folders
+
     Object.values(folders)
       .sort((a, b) => a.order - b.order)
       .forEach((f) => (_folders[f.id] = []));

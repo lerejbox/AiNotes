@@ -48,6 +48,7 @@ export interface Folder {
   expanded: boolean;
   order: number;
   color?: string;
+  parentFolderId?: string; // Added to allow nesting of folders
 }
 
 export type ModelOptions =

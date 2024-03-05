@@ -11,6 +11,7 @@ import {
 
 import ChatHistory from './ChatHistory';
 import NewChat from './NewChat';
+import NewFolder from './NewFolder';
 import EditIcon from '@icon/EditIcon';
 import DeleteIcon from '@icon/DeleteIcon';
 import CrossIcon from '@icon/CrossIcon';
@@ -298,6 +299,7 @@ const ChatFolder = ({
       </div>
       <div className='ml-3 pl-1 border-l-2 border-gray-700 flex flex-col gap-1 parent'>
         {isExpanded && <NewChat folder={folderId} />}
+        {isExpanded && <NewFolder parentFolderId={folderId} />} {/* Render NewFolder with parentFolderId */}
         {isExpanded &&
           folderChats.map((chat) => (
             <ChatHistory
