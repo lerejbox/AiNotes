@@ -85,7 +85,7 @@ const GoogleSync = ({ clientId }: { clientId: string }) => {
   return (
     <GoogleOAuthProvider clientId={clientId}>
       <div
-        className='flex py-2 px-2 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm'
+        className='flex py-2 px-2 items-center gap-3 rounded-xl hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm'
         onClick={() => {
           setIsModalOpen(true);
         }}
@@ -161,7 +161,7 @@ const GooglePopup = ({
             }, 3540000); // timeout - 3540000ms = 59 min (access token last 60 min)
           }}
         />
-        <p className='border border-gray-400 px-3 py-2 rounded-md'>
+        <p className='border border-gray-400 px-3 py-2 rounded-xl'>
           {t('notice')}
         </p>
         {cloudSync && syncStatus !== 'unauthenticated' && (
@@ -296,7 +296,7 @@ const FileSelector = ({
         {isEditing ? (
           <input
             type='text'
-            className='text-gray-800 dark:text-white p-3 text-sm border-none bg-gray-200 dark:bg-gray-600 rounded-md m-0 w-full mr-0 h-8 focus:outline-none'
+            className='text-gray-800 dark:text-white p-3 text-sm border-none bg-gray-200 dark:bg-gray-600 rounded-xl m-0 w-full mr-0 h-8 focus:outline-none'
             value={_name}
             onChange={(e) => {
               _setName(e.target.value);

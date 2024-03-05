@@ -248,15 +248,16 @@
   }
 
   .new-chat-dark {
-    background-color: #22272E;
+    background: linear-gradient(to bottom, #17191F 0%, #1C1F26 50%, #17191F 100%);
   }
 
   .new-chat-light {
-    background-color: #2d3641;
+    background-color: #23272F
+    /* background: linear-gradient(to bottom, #20232B 0%, #282d37 50%, #20232B 100%); */
   }
 
   .new-chat-lighter {
-    background-color: #38414e;
+    background-color: #343A46;
   }
 
   .new-chat-light-hover {
@@ -264,13 +265,13 @@
   }
 
   .new-bg-transp {
-    background-color: rgba(28, 33, 40, 0.9);
+    background-color: rgba(23, 25, 31, 0.9);
   }
 
   .new-btn {
     align-items: center;
     border-color: transparent;
-    border-radius: 0.25rem;
+    border-radius: 15px;
     border-width: 1px;
     display: inline-flex;
     font-size: 0.875rem;
@@ -305,7 +306,7 @@
   .new-btn-primary:hover {
     --tw-bg-opacity: 1;
     background-color: rgba(31, 121, 148, var(--tw-bg-opacity));
-    background-color: #1f8194
+    background-color: #087EA4
   }
 }
 

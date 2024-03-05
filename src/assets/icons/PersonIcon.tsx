@@ -1,15 +1,15 @@
 import React from 'react';
 
-const PersonIcon = () => {
+const PersonIcon = ({ color = 'currentColor' }) => {
   return (
     <svg
-      stroke='currentColor'
-      fill='none'
+      stroke={color}
+      fill='#75B4D4'
       strokeWidth='2'
       viewBox='0 0 24 24'
       strokeLinecap='round'
       strokeLinejoin='round'
-      className='h-4 w-4'
+      className='h-8 w-8'
       height='1em'
       width='1em'
       xmlns='http://www.w3.org/2000/svg'

@@ -17,7 +17,7 @@ const Menu = () => {
   const [menuWidth, setMenuWidth] = useState(260); // Default width
   const ref = useRef<HTMLDivElement>(null);
 
-  const minimumWidth = 260; // Minimum width before hiding the menu
+  const minimumWidth = 260; // Minimum width before hiding the menu (260 is width of menu)
   const hideMenuWidthThreshold = 80; // Threshold to decide when to hide the menu
 
   useEffect(() => {

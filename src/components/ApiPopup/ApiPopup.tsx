@@ -47,7 +47,7 @@ const ApiPopup = () => {
           </div>
           <input
             type='text'
-            className='text-gray-800 dark:text-white p-3 text-sm border-none bg-gray-200 dark:bg-gray-600 rounded-md m-0 w-full mr-0 h-8 focus:outline-none'
+            className='text-gray-800 dark:text-white p-3 text-sm border-none bg-gray-200 dark:bg-gray-600 rounded-xl m-0 w-full mr-0 h-8 focus:outline-none'
             value={_apiKey}
             onChange={(e) => {
               _setApiKey(e.target.value);
@@ -89,7 +89,7 @@ const ApiPopup = () => {
         </div>
 
         {error.length > 0 && (
-          <div className='relative py-2 px-3 w-full mt-3 border rounded-md border-red-500 bg-red-500/10'>
+          <div className='relative py-2 px-3 w-full mt-3 border rounded-xl border-red-500 bg-red-500/10'>
             <div className='text-gray-600 dark:text-gray-100 text-sm whitespace-pre-wrap'>
               {error}
             </div>

@@ -6,7 +6,7 @@ import useStore from '@store/store';
 import NewFolderIcon from '@icon/NewFolderIcon';
 import { Folder, FolderCollection } from '@type/chat';
 
-const NewFolder = () => {
+const NewFolder = ({ parentFolderId }: { parentFolderId?: string }) => {
   const { t } = useTranslation();
   const generating = useStore((state) => state.generating);
   const setFolders = useStore((state) => state.setFolders);
@@ -32,6 +32,7 @@ const NewFolder = () => {
       name,
       expanded: false,
       order: 0,
+      parentFolderId, // Assign the parentFolderId to the new folder
     };
 
     Object.values(updatedFolders).forEach((folder) => {
@@ -43,7 +44,7 @@ const NewFolder = () => {
 
   return (
     <a
-      className={`flex py-3 px-3 items-center gap-3 rounded-md hover:new-lightblue transition-colors duration-200 text-white text-sm mb-2 flex-shrink-0 border border-white/20 transition-opacity ${
+      className={`flex py-3 px-3 items-center gap-3 rounded-xl hover:new-lightblue transition-colors duration-200 text-white text-sm mb-2 flex-shrink-0 border border-white/20 transition-opacity ${
         generating
           ? 'cursor-not-allowed opacity-40'
           : 'cursor-pointer opacity-100'

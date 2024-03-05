@@ -135,7 +135,7 @@ const EditView = ({
       <div
         className={`w-full ${
           sticky
-            ? 'py-2 md:py-3 px-2 md:px-4 border border-black/10 bg-white dark:border-white/20 dark:text-white dark:new-chat-lighter rounded-md shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]'
+            ? 'py-2 md:py-3 px-2 md:px-4 border border-black/10 bg-white dark:border-white/20 dark:text-white dark:new-chat-lighter rounded-xl shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]'
             : ''
         }`}
       >

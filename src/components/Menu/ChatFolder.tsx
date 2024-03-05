@@ -11,6 +11,7 @@ import {
 
 import ChatHistory from './ChatHistory';
 import NewChat from './NewChat';
+import NewFolder from './NewFolder';
 import EditIcon from '@icon/EditIcon';
 import DeleteIcon from '@icon/DeleteIcon';
 import CrossIcon from '@icon/CrossIcon';
@@ -21,6 +22,11 @@ import RefreshIcon from '@icon/RefreshIcon';
 import { folderColorOptions } from '@constants/color';
 
 import useHideOnOutsideClick from '@hooks/useHideOnOutsideClick';
+
+import useAddChat from '@hooks/useAddChat'; // Import useAddChat hook
+import RightClickMenu from './RightClickMenu/RightClickMenu';
+import { v4 as uuidv4 } from 'uuid';
+
 
 const ChatFolder = ({
   folderChats,
@@ -36,6 +42,8 @@ const ChatFolder = ({
   const setChats = useStore((state) => state.setChats);
   const setFolders = useStore((state) => state.setFolders);
 
+  const addChat = useAddChat(); // Use the addChat hook
+
   const inputRef = useRef<HTMLInputElement>(null);
   const folderRef = useRef<HTMLDivElement>(null);
   const gradientRef = useRef<HTMLDivElement>(null);
@@ -46,6 +54,16 @@ const ChatFolder = ({
   const [isHover, setIsHover] = useState<boolean>(false);
 
   const [showPalette, setShowPalette, paletteRef] = useHideOnOutsideClick();
+
+  // Added state for right-click menu visibility and position
+  const [showRightClickMenu, setShowRightClickMenu] = useState(false);
+  const [RightClickMenuPosition, setRightClickMenuPosition] = useState({ x: 0, y: 0 });
+
+  const handleRightClick = (event: React.MouseEvent) => {
+    event.preventDefault();
+    setRightClickMenuPosition({ x: event.clientX, y: event.clientY });
+    setShowRightClickMenu(true);
+  };
 
   const editTitle = () => {
     const updatedFolders: FolderCollection = JSON.parse(
@@ -147,6 +165,33 @@ const ChatFolder = ({
     if (inputRef && inputRef.current) inputRef.current.focus();
   }, [isEdit]);
 
+  const rightClickMenuOptions = [
+    {
+      label: 'New Chat',
+      action: () => {
+        addChat(folderId);
+      },
+    },
+    {
+      label: 'New Folder',
+      action: () => {
+        const newFolderId = uuidv4();
+        const updatedFolders: FolderCollection = JSON.parse(
+          JSON.stringify(useStore.getState().folders)
+        );
+        const order = Object.values(updatedFolders).filter(f => f.parentFolderId === folderId).length;
+        updatedFolders[newFolderId] = {
+          id: newFolderId,
+          name: `New Folder`,
+          expanded: false,
+          order: order,
+          parentFolderId: folderId, // Set the parent folder ID to create a nested folder
+        };
+        setFolders(updatedFolders);
+      },
+    },
+  ];
+
   return (
     <div
       className={`w-full transition-colors group/folder ${
@@ -155,12 +200,13 @@ const ChatFolder = ({
       onDrop={handleDrop}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
+      onContextMenu={handleRightClick}
     >
       <div
         style={{ background: color || '' }}
         className={`${
-          color ? '' : 'hover:bg-gray-850'
-        } transition-colors flex py-2 pl-2 pr-1 items-center gap-3 relative rounded-md break-all cursor-pointer parent-sibling`}
+          color ? '' : 'hover:new-lightblue'
+        } transition-colors flex py-2 pl-2 pr-1 items-center gap-3 relative rounded-xl break-all cursor-pointer parent-sibling`}
         onClick={toggleExpanded}
         ref={folderRef}
         onMouseEnter={() => {
@@ -296,16 +342,40 @@ const ChatFolder = ({
           )}
         </div>
       </div>
+      <div>
+      {showRightClickMenu && (
+        <RightClickMenu
+          x={RightClickMenuPosition.x}
+          y={RightClickMenuPosition.y}
+          onClose={() => setShowRightClickMenu(false)}
+          options={rightClickMenuOptions} // Updated options
+        />
+      )}
+      </div>
       <div className='ml-3 pl-1 border-l-2 border-gray-700 flex flex-col gap-1 parent'>
-        {isExpanded && <NewChat folder={folderId} />}
-        {isExpanded &&
-          folderChats.map((chat) => (
-            <ChatHistory
-              title={chat.title}
-              chatIndex={chat.index}
-              key={`${chat.title}-${chat.index}`}
-            />
-          ))}
+        {isExpanded && (
+          <>
+            {/*removed new chat dropdown*/}
+            {/* <NewChat folder={folderId} /> */}
+            {folderChats.map((chat) => (
+              <ChatHistory
+                title={chat.title}
+                chatIndex={chat.index}
+                key={`${chat.title}-${chat.index}`}
+              />
+            ))}
+            {/* Recursively render nested folders here if any */}
+            {Object.entries(useStore.getState().folders)
+              .filter(([_, folder]) => folder.parentFolderId === folderId)
+              .map(([nestedFolderId, _]) => (
+                <ChatFolder
+                  folderChats={[]}
+                  folderId={nestedFolderId}
+                  key={nestedFolderId}
+                />
+              ))}
+          </>
+        )}
       </div>
     </div>
   );
