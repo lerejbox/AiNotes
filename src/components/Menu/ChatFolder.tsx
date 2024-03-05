@@ -206,7 +206,7 @@ const ChatFolder = ({
         style={{ background: color || '' }}
         className={`${
           color ? '' : 'hover:new-lightblue'
-        } transition-colors flex py-2 pl-2 pr-1 items-center gap-3 relative rounded-md break-all cursor-pointer parent-sibling`}
+        } transition-colors flex py-2 pl-2 pr-1 items-center gap-3 relative rounded-xl break-all cursor-pointer parent-sibling`}
         onClick={toggleExpanded}
         ref={folderRef}
         onMouseEnter={() => {

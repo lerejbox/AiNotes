@@ -27,7 +27,7 @@ const ChatSearch = ({ filter, setFilter }: { filter: string; setFilter: React.Di
 
   return (
     <div className="flex items-center">
-      <div className="flex-grow">
+      <div className="flex-grow mr-[-2]">
       <SearchBar
         value={_filter}
         handleChange={handleChange}
@@ -36,7 +36,7 @@ const ChatSearch = ({ filter, setFilter }: { filter: string; setFilter: React.Di
       />
       </div>
       <div 
-      className={`flex py-1 px-2 items-center gap-0 rounded-md hover:new-lightblue transition-colors duration-200 text-white text-sm mb-2 flex-shrink-0 border border-white/20 transition-opacity ${
+      className={`flex py-1 px-2 rounded-xl hover:new-lightblue transition-colors duration-200 text-white text-sm mb-2 border border-white/20 ${
         generating
           ? 'cursor-not-allowed opacity-40'
           : 'cursor-pointer opacity-100'

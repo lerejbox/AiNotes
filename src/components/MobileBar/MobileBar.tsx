@@ -23,7 +23,7 @@ const MobileBar = () => {
     <div className='sticky top-0 left-0 w-full z-50 flex items-center bg-gray-800 dark:new-chat-light pl-1 pt-1 text-gray-200 sm:pl-3 md:hidden'>
       <button
         type='button'
-        className='-ml-0.5 -mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-md hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white dark:hover:text-white'
+        className='-ml-0.5 -mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-xl hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white dark:hover:text-white'
         onClick={() => {
           setHideSideMenu(false);
         }}
