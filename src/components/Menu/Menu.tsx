@@ -17,7 +17,7 @@ const Menu = () => {
   const [menuWidth, setMenuWidth] = useState(260); // Default width
   const ref = useRef<HTMLDivElement>(null);
 
-  const minimumWidth = 260; // Minimum width before hiding the menu (260 is width of menu)
+  const minimumWidth = 260; // Minimum width before hiding the menu
   const hideMenuWidthThreshold = 80; // Threshold to decide when to hide the menu
 
   useEffect(() => {
@@ -89,7 +89,7 @@ const Menu = () => {
           id='menu-close'
           className={`${
             hideSideMenu ? 'hidden' : ''
-          } md:hidden absolute z-[999] right-0 translate-x-full top-10 bg-gray-900 p-2 cursor-pointer hover:bg-black text-white`}
+          } md:hidden absolute z-[999] right-0 translate-x-full top-10 bg-black p-2 cursor-pointer hover:bg-black text-white`}
           onClick={() => {
             setHideSideMenu(true);
           }}
@@ -99,7 +99,7 @@ const Menu = () => {
         <div
           className={`${
             hideSideMenu ? 'opacity-100' : 'opacity-0'
-          } group/menu md:group-hover/menu:opacity-100 max-md:hidden transition-opacity absolute z-[999] right-0 translate-x-full top-10 bg-gray-900 p-2 cursor-pointer hover:bg-black text-white ${
+          } group/menu md:group-hover/menu:opacity-100 max-md:hidden transition-opacity absolute z-[999] right-0 translate-x-full top-10 new-menu-dark p-1 cursor-pointer hover:new-lightblue text-white rounded-2xl border border-white/20 ${
             hideSideMenu ? '' : 'rotate-90'
           }`}
           onClick={() => {
@@ -107,7 +107,7 @@ const Menu = () => {
           }}
         >
           {hideSideMenu ? (
-            <MenuIcon className='h-4 w-4' />
+            <MenuIcon className='h-6 w-6' />
           ) : (
             <DownArrow className='h-4 w-4' />
           )}
