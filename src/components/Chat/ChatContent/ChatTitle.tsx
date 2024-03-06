@@ -42,7 +42,7 @@ const ChatTitle = React.memo(() => {
 
   return config ? (
     <>
-      <div
+      {/* <div
         className='flex gap-x-4 gap-y-1 flex-wrap w-full items-center justify-center border-b border-black/10 bg-gray-50 p-3 dark:border-gray-900/50 dark:new-chat-dark text-gray-600 dark:text-gray-300 cursor-pointer'
         onClick={() => {
           setIsModalOpen(true);
@@ -66,7 +66,7 @@ const ChatTitle = React.memo(() => {
         <div className='text-center p-1 rounded-xl bg-gray-300/20 dark:new-chat-light hover:bg-gray-300/50 dark:hover:new-chat-light-hover'>
           {t('frequencyPenalty.label')}: {config.frequency_penalty}
         </div>
-      </div>
+      </div> */}
       {isModalOpen && (
         <ConfigMenu
           setIsModalOpen={setIsModalOpen}

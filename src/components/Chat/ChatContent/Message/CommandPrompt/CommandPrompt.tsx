@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import useStore from '@store/store';
-
+import { shallow } from 'zustand/shallow';
 import { useTranslation } from 'react-i18next';
 import { matchSorter } from 'match-sorter';
 import { Prompt } from '@type/prompt';
 import PromptLibraryIcon from '@icon/PromptLibraryIcon';
-
+import ConfigMenu from '@components/ConfigMenu';
+import { ChatInterface, ConfigInterface } from '@type/chat';
+import { _defaultChatConfig } from '@constants/chat';
 import useHideOnOutsideClick from '@hooks/useHideOnOutsideClick';
 
 const CommandPrompt = ({
@@ -13,13 +15,43 @@ const CommandPrompt = ({
 }: {
   _setContent: React.Dispatch<React.SetStateAction<string>>;
 }) => {
-  const { t } = useTranslation();
   const prompts = useStore((state) => state.prompts);
   const [_prompts, _setPrompts] = useState<Prompt[]>(prompts);
   const [input, setInput] = useState<string>('');
   const inputRef = useRef<HTMLInputElement>(null);
-
   const [dropDown, setDropDown, dropDownRef] = useHideOnOutsideClick();
+
+  const { t } = useTranslation('model');
+  const config = useStore(
+    (state) =>
+      state.chats &&
+      state.chats.length > 0 &&
+      state.currentChatIndex >= 0 &&
+      state.currentChatIndex < state.chats.length
+        ? state.chats[state.currentChatIndex].config
+        : undefined,
+    shallow
+  );
+  const setChats = useStore((state) => state.setChats);
+  const currentChatIndex = useStore((state) => state.currentChatIndex);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const setConfig = (config: ConfigInterface) => {
+    const updatedChats: ChatInterface[] = JSON.parse(
+      JSON.stringify(useStore.getState().chats)
+    );
+    updatedChats[currentChatIndex].config = config;
+    setChats(updatedChats);
+  };
+
+  useEffect(() => {
+    const chats = useStore.getState().chats;
+    if (chats && chats.length > 0 && currentChatIndex !== -1 && !config) {
+      const updatedChats: ChatInterface[] = JSON.parse(JSON.stringify(chats));
+      updatedChats[currentChatIndex].config = { ..._defaultChatConfig };
+      setChats(updatedChats);
+    }
+  }, [currentChatIndex]);
 
   useEffect(() => {
     if (dropDown && inputRef.current) {
@@ -40,15 +72,36 @@ const CommandPrompt = ({
     setInput('');
   }, [prompts]);
 
-  return (
+  return config ? (
     <div className='relative max-wd-sm' ref={dropDownRef}>
-      <button
-        className='btn btn-neutral dark:new-btn dark:new-btn-neutral btn-small'
-        aria-label='prompt library'
-        onClick={() => setDropDown(!dropDown)}
-      >
-        <PromptLibraryIcon/>
-      </button>
+      <div className="flex space-x-2">
+        {/* New button */}
+        <button
+          className='btn btn-neutral dark:new-btn dark:new-btn-neutral btn-small'
+          aria-label='config-menu'
+          onClick={() => {
+            setIsModalOpen(true);
+          }}
+        >
+          {config.model}
+        </button>
+        {
+          isModalOpen && (
+            <ConfigMenu
+              setIsModalOpen={setIsModalOpen}
+              config={config}
+              setConfig={setConfig}
+            />
+          )
+        }
+        <button
+          className='btn btn-neutral dark:new-btn dark:new-btn-neutral btn-small'
+          aria-label='prompt library'
+          onClick={() => setDropDown(!dropDown)}
+        >
+          <PromptLibraryIcon/>
+        </button>
+      </div>
       <div
         className={`${
           dropDown ? '' : 'hidden'
@@ -81,7 +134,7 @@ const CommandPrompt = ({
         </ul>
       </div>
     </div>
-  );
+  ): null;
 };
 
 export default CommandPrompt;
