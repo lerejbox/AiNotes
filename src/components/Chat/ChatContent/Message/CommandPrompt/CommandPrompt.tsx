@@ -4,6 +4,7 @@ import useStore from '@store/store';
 import { useTranslation } from 'react-i18next';
 import { matchSorter } from 'match-sorter';
 import { Prompt } from '@type/prompt';
+import PromptLibraryIcon from '@icon/PromptLibraryIcon';
 
 import useHideOnOutsideClick from '@hooks/useHideOnOutsideClick';
 
@@ -46,7 +47,7 @@ const CommandPrompt = ({
         aria-label='prompt library'
         onClick={() => setDropDown(!dropDown)}
       >
-        /
+        <PromptLibraryIcon/>
       </button>
       <div
         className={`${
