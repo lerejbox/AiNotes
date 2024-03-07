@@ -75,7 +75,6 @@ const CommandPrompt = ({
   return config ? (
     <div className='relative max-wd-sm' ref={dropDownRef}>
       <div className="flex space-x-2">
-        {/* New button */}
         <button
           className='btn btn-neutral dark:new-btn dark:new-btn-neutral btn-small'
           aria-label='config-menu'
