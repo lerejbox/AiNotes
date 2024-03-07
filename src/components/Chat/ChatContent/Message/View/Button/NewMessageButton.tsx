@@ -3,8 +3,11 @@ import useStore from '@store/store';
 
 import PlusIcon from '@icon/PlusIcon';
 
+import BaseButton from './BaseButton';
+
 import { ChatInterface } from '@type/chat';
 import { generateDefaultChat } from '@constants/chat';
+
 
 const NewMessageButton = React.memo(
   ({ messageIndex }: { messageIndex: number }) => {
@@ -56,18 +59,11 @@ const NewMessageButton = React.memo(
  
 
     return (
-      <div
-        className='h-0 w-0 relative'
-        key={messageIndex}
-        aria-label='insert message'
-      >
-        <div
-          className='absolute top-0 right-0 translate-x-1/2 translate-y-[-50%] text-gray-600 dark:text-white cursor-pointer bg-gray-200 dark:bg-gray-600/80 rounded-full p-1 text-sm hover:bg-gray-300 dark:hover:bg-gray-800/80 transition-bg duration-200'
-          onClick={addMessage}
-        >
-          <PlusIcon />
-        </div>
-      </div>
+      <BaseButton
+        icon={<PlusIcon />}
+        buttonProps={{ 'aria-label': 'insert message' }}
+        onClick={addMessage}
+      />
     );
   }
 );

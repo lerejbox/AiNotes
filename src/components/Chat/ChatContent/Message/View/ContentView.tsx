@@ -24,7 +24,6 @@ import { ChatInterface } from '@type/chat';
 import { codeLanguageSubset } from '@constants/chat';
 
 import RefreshButton from './Button/RefreshButton';
-// import UpButton from './Button/UpButton';
 import DownButton from './Button/DownButton';
 import CopyButton from './Button/CopyButton';
 import EditButton from './Button/EditButton';
@@ -32,6 +31,8 @@ import DeleteButton from './Button/DeleteButton';
 import MarkdownModeButton from './Button/MarkdownModeButton';
 
 import CodeBlock from '../CodeBlock';
+import NewMessageButton from './Button/NewMessageButton';
+import { MessageInterface } from '@type/chat';
 
 const ContentView = memo(
   ({
@@ -56,6 +57,10 @@ const ContentView = memo(
     );
     const inlineLatex = useStore((state) => state.inlineLatex);
     const markdownMode = useStore((state) => state.markdownMode);
+    
+    const advancedMode = useStore((state) => state.advancedMode);
+    const generating = useStore.getState().generating;
+    const [filteredMessages, setFilteredMessages] = useState<MessageInterface[]>([]);
 
     const handleDelete = () => {
       const updatedChats: ChatInterface[] = JSON.parse(
@@ -64,30 +69,6 @@ const ContentView = memo(
       updatedChats[currentChatIndex].messages.splice(messageIndex, 1);
       setChats(updatedChats);
     };
-
-    // const handleMove = (direction: 'up' | 'down') => {
-    //   const updatedChats: ChatInterface[] = JSON.parse(
-    //     JSON.stringify(useStore.getState().chats)
-    //   );
-    //   const updatedMessages = updatedChats[currentChatIndex].messages;
-    //   const temp = updatedMessages[messageIndex];
-    //   if (direction === 'up') {
-    //     updatedMessages[messageIndex] = updatedMessages[messageIndex - 1];
-    //     updatedMessages[messageIndex - 1] = temp;
-    //   } else {
-    //     updatedMessages[messageIndex] = updatedMessages[messageIndex + 1];
-    //     updatedMessages[messageIndex + 1] = temp;
-    //   }
-    //   setChats(updatedChats);
-    // };
-
-    // const handleMoveUp = () => {
-    //   handleMove('up');
-    // };
-
-    // const handleMoveDown = () => {
-    //   handleMove('down');
-    // };
 
     const handleRefresh = () => {
       const updatedChats: ChatInterface[] = JSON.parse(
@@ -138,16 +119,12 @@ const ContentView = memo(
         <div className='flex justify-end gap-2 w-full mt-2'>
           {isDelete || (
             <>
+              {!generating && advancedMode && filteredMessages.length === 0 && <NewMessageButton messageIndex={messageIndex} />}
               {!useStore.getState().generating &&
                 role === 'assistant' &&
                 messageIndex === lastMessageIndex && (
                   <RefreshButton onClick={handleRefresh} />
                 )}
-              {/* {messageIndex !== 0 && <UpButton onClick={handleMoveUp} />} */}
-              {/* {messageIndex !== lastMessageIndex && (
-                <DownButton onClick={handleMoveDown} />
-              )} */}
-
               <MarkdownModeButton />
               <CopyButton onClick={handleCopy} />
               <EditButton setIsEdit={setIsEdit} />

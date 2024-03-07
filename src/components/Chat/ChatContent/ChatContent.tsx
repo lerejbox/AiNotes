@@ -3,9 +3,7 @@ import ScrollToBottom from 'react-scroll-to-bottom';
 import useStore from '@store/store';
 
 import ScrollToBottomButton from './ScrollToBottomButton';
-import ChatTitle from './ChatTitle';
 import Message from './Message';
-import NewMessageButton from './Message/NewMessageButton';
 import CrossIcon from '@icon/CrossIcon';
 
 import useSubmit from '@hooks/useSubmit';
@@ -78,16 +76,13 @@ const ChatContent = () => {
           <div
             className='flex flex-col items-center text-sm dark:new-chat-light w-full'
           >
-            {advancedMode && <ChatTitle />}
-            {!generating && advancedMode && filteredMessages.length === 0 && <NewMessageButton messageIndex={-1} />}
             {filteredMessagesWithOriginalIndex.map((message, index) => (
               <React.Fragment key={index}>
                 <Message
                   role={message.role}
                   content={message.content}
-                  messageIndex={message.originalIndex} // Use originalIndex
+                  messageIndex={message.originalIndex}
                 />
-                {!generating && advancedMode && <NewMessageButton messageIndex={message.originalIndex} />}
               </React.Fragment>
             ))}
           </div>

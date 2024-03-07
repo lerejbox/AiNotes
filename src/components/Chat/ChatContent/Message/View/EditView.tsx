@@ -29,7 +29,7 @@ const EditView = ({
   const [_content, _setContent] = useState<string>(content);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const textareaRef = React.createRef<HTMLTextAreaElement>();
-
+  const hideSideMenu = useStore((state) => state.hideSideMenu);
   const { t } = useTranslation();
 
   const resetTextAreaHeight = () => {
@@ -158,6 +158,7 @@ const EditView = ({
         setIsModalOpen={setIsModalOpen}
         setIsEdit={setIsEdit}
         _setContent={_setContent}
+        hideSideMenu={hideSideMenu}
       />
       {isModalOpen && (
         <PopupModal
@@ -179,6 +180,7 @@ const EditViewButtons = memo(
     setIsModalOpen,
     setIsEdit,
     _setContent,
+    hideSideMenu,
   }: {
     sticky?: boolean;
     handleGenerate: () => void;
@@ -186,14 +188,21 @@ const EditViewButtons = memo(
     setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setIsEdit: React.Dispatch<React.SetStateAction<boolean>>;
     _setContent: React.Dispatch<React.SetStateAction<string>>;
+    hideSideMenu: boolean;
   }) => {
     const { t } = useTranslation();
     const generating = useStore.getState().generating;
     const advancedMode = useStore((state) => state.advancedMode);
 
     return (
-      <div className='flex'>
-        <div className='flex-1 text-center mt-2 flex justify-center'>
+      <div className='flex items-center justify-between'>
+          <div
+            className='flex'
+            style={{
+              marginRight: 'auto',
+              marginLeft: hideSideMenu ? '395px' : '265px',
+            }}
+          >
           {sticky && (
             <button
               className={`new-btn relative mr-2 new-btn-primary ${
@@ -249,8 +258,10 @@ const EditViewButtons = memo(
             </button>
           )}
         </div>
+        <div className='flex'>
         {sticky && advancedMode && <TokenCount />}
         <CommandPrompt _setContent={_setContent} />
+        </div>
       </div>
     );
   }

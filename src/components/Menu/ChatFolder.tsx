@@ -220,7 +220,7 @@ const ChatFolder = ({
           if (gradientRef.current) gradientRef.current.style.width = '1rem';
         }}
       >
-        <FolderIcon className='h-4 w-4' />
+        <FolderIcon/>
         <div className='flex-1 text-ellipsis max-h-5 overflow-hidden break-all relative'>
           {isEdit ? (
             <input
