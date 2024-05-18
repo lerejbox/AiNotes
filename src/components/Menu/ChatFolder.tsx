@@ -4,7 +4,7 @@ import useStore from '@store/store';
 import DownChevronArrow from '@icon/DownChevronArrow';
 import FolderIcon from '@icon/FolderIcon';
 import {
-  ChatHistoryInterface,
+  ChatHistoryFolderInterface,
   ChatInterface,
   FolderCollection,
 } from '@type/chat';
@@ -23,7 +23,8 @@ import { folderColorOptions } from '@constants/color';
 
 import useHideOnOutsideClick from '@hooks/useHideOnOutsideClick';
 
-import useAddChat from '@hooks/useAddChat'; // Import useAddChat hook
+import useAddChat from '@hooks/useAddChat';
+// import useAddFolder from '@hooks/useAddFolder';
 import RightClickMenu from './RightClickMenu/RightClickMenu';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -31,9 +32,11 @@ import { v4 as uuidv4 } from 'uuid';
 const ChatFolder = ({
   folderChats,
   folderId,
+  childFolders,
 }: {
-  folderChats: ChatHistoryInterface[];
+  folderChats: ChatHistoryFolderInterface;
   folderId: string;
+  childFolders: FolderCollection;
 }) => {
   const folderName = useStore((state) => state.folders[folderId]?.name);
   const isExpanded = useStore((state) => state.folders[folderId]?.expanded);
@@ -43,6 +46,7 @@ const ChatFolder = ({
   const setFolders = useStore((state) => state.setFolders);
 
   const addChat = useAddChat(); // Use the addChat hook
+  // const addFolder = useAddFolder();
 
   const inputRef = useRef<HTMLInputElement>(null);
   const folderRef = useRef<HTMLDivElement>(null);
@@ -170,6 +174,10 @@ const ChatFolder = ({
       label: 'New Chat',
       action: () => {
         addChat(folderId);
+        const updatedChats: ChatInterface[] = JSON.parse(
+          JSON.stringify(useStore.getState().chats)
+        );
+        setChats(updatedChats);
       },
     },
     {
@@ -183,9 +191,10 @@ const ChatFolder = ({
         updatedFolders[newFolderId] = {
           id: newFolderId,
           name: `New Folder`,
-          expanded: false,
+          expanded: true,
           order: order,
           parentFolderId: folderId, // Set the parent folder ID to create a nested folder
+          childFolders: {} as FolderCollection,
         };
         setFolders(updatedFolders);
       },
@@ -355,9 +364,7 @@ const ChatFolder = ({
       <div className='ml-3 pl-1 border-l-2 border-gray-700 flex flex-col gap-1 parent'>
         {isExpanded && (
           <>
-            {/*removed new chat dropdown*/}
-            {/* <NewChat folder={folderId} /> */}
-            {folderChats.map((chat) => (
+            {folderChats[folderId] && folderChats[folderId].map((chat) => (
               <ChatHistory
                 title={chat.title}
                 chatIndex={chat.index}
@@ -367,10 +374,11 @@ const ChatFolder = ({
             {/* Recursively render nested folders here if any */}
             {Object.entries(useStore.getState().folders)
               .filter(([_, folder]) => folder.parentFolderId === folderId)
-              .map(([nestedFolderId, _]) => (
+              .map(([nestedFolderId, folder]) => (
                 <ChatFolder
-                  folderChats={[]}
+                  folderChats={folderChats}
                   folderId={nestedFolderId}
+                  childFolders={folder.childFolders || {}}
                   key={nestedFolderId}
                 />
               ))}

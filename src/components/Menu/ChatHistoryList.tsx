@@ -201,13 +201,18 @@ const ChatHistoryList = () => {
     >
       <ChatSearch filter={filter} setFilter={setFilter} />
       <div className='flex flex-col gap-2 text-gray-100 text-sm'>
-        {Object.keys(chatFolders).map((folderId) => (
-          <ChatFolder
-            folderChats={chatFolders[folderId]}
-            folderId={folderId}
-            key={folderId}
-          />
-        ))}
+        {Object.entries(useStore.getState().folders)
+          .map(([folderId, folder]) => (
+            !folder?.parentFolderId && (
+              <ChatFolder
+                folderChats={chatFolders}
+                folderId={folderId}
+                key={folderId}
+                childFolders={folder.childFolders || {}}
+            />
+            )
+          )
+        )}
         {noChatFolders.map(({ title, index, id }) => (
           <ChatHistory title={title} key={`${title}-${id}`} chatIndex={index} />
         ))}
