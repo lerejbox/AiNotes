@@ -19,5 +19,10 @@ export default defineConfig({
       '@src/': new URL('./src/', import.meta.url).pathname,
     },
   },
+  server: {
+    watch: {
+      usePolling: true
+    }
+  },
   base: './',
 });
