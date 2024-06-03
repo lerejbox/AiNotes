@@ -65,6 +65,7 @@ const ChatFolder = ({
 
   const handleRightClick = (event: React.MouseEvent) => {
     event.preventDefault();
+    event.stopPropagation();
     setRightClickMenuPosition({ x: event.clientX, y: event.clientY });
     setShowRightClickMenu(true);
   };
