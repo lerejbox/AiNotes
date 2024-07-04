@@ -80,12 +80,10 @@ const ChatFolder = ({
   };
 
   const deleteFolder = () => {
-    const updatedChats: ChatInterface[] = JSON.parse(
+    let updatedChats: ChatInterface[] = JSON.parse(
       JSON.stringify(useStore.getState().chats)
     );
-    updatedChats.forEach((chat) => {
-      if (chat.folder === folderId) delete chat.folder;
-    });
+    updatedChats.filter(chat => chat.folder !== folderId);
     setChats(updatedChats);
 
     const updatedFolders: FolderCollection = JSON.parse(
