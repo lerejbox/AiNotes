@@ -73,31 +73,55 @@ const ChatHistoryList = () => {
         const shouldSkip = (!_chatTitle.includes(_filterLowerCase) && !_chatFolderName.includes(_filterLowerCase)) ||
                             (colorFilter && chat.color !== colorFilter);
   
-        if (shouldSkip) {
-          return;
-        }
+        if (shouldSkip) return true;
   
         if (!chat.folder) {
-          _noFolders.push({ title: chat.title, index: index, id: chat.id });
-        } else {
-          if (!_folders[chat.folder]) _folders[chat.folder] = [];
-          _folders[chat.folder].push({
-            title: chat.title,
-            index: index,
-            id: chat.id,
-          });
-          // Mark folder for expansion if it contains a chat matching the filter
-          shouldExpandFolders[chat.folder] = true;
+            _noFolders.push({
+              title: chat.title, 
+              index: index, 
+              id: chat.id 
+            });
+          return true;
         }
+
+        if (!_folders[chat.folder]) _folders[chat.folder] = [];
+
+        _folders[chat.folder].push({
+          title: chat.title,
+          index: index,
+          id: chat.id,
+        });
+        
+        // Mark immediate folder for expansion if it contains a chat matching the filter
+        shouldExpandFolders[chat.folder] = true;
       });
     }
 
-    // Automatically expand folders containing chats that match the color filter
+    const updatedFolders = { ...folders };
+
     if (colorFilter) {
-      const updatedFolders = { ...folders };
+      // updates marked parent folders recursively until root with early exit
+      const updateParentFolders = (folderId: string) => {
+        let currentFolderId = folderId;
+        while (
+          updatedFolders[currentFolderId] &&
+          updatedFolders[currentFolderId].parentFolderId
+        ) {
+          const parentFolderId = updatedFolders[currentFolderId].parentFolderId;
+          if (parentFolderId) {
+            updatedFolders[parentFolderId].expanded = true;
+            currentFolderId = parentFolderId;
+          }
+        }
+      };
+
       Object.keys(updatedFolders).forEach(folderId => {
-        updatedFolders[folderId].expanded = !!shouldExpandFolders[folderId];
+        if (updatedFolders[folderId]) {
+          updatedFolders[folderId].expanded = !!shouldExpandFolders[folderId];
+          updateParentFolders(folderId);
+        }
       });
+
       setFolders(updatedFolders); // Assuming setFolders updates the global state of folders
     }
   
