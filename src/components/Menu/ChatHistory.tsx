@@ -97,6 +97,7 @@ const ChatHistory = React.memo(
       updatedChats[chatIndex].color = _color;
       setChats(updatedChats);
       setShowPalette(false);
+      setHoverBackground(`${_color}`);
     };
 
     const handleMouseEnter = () => {
